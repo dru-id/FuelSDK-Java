@@ -34,11 +34,11 @@
 
 package com.exacttarget.fuelsdk;
 
-import java.util.Date;
-
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 import com.google.gson.annotations.Expose;
+
+import java.util.Date;
 
 /**
  * An <code>ETCampaignAsset</code> object represents a campaign asset
@@ -47,7 +47,7 @@ import com.google.gson.annotations.Expose;
 
 @RestObject(path = "/hub/v1/campaigns/{campaignId}/assets",
             primaryKey = "id",
-            collection = "entities",
+            collection = "items",
             totalCount = "count")
 public class ETCampaignAsset extends ETRestObject {
     @Expose
@@ -62,6 +62,9 @@ public class ETCampaignAsset extends ETRestObject {
     @Expose
     @ExternalName("type")
     private String type = null;
+    @Expose
+    @ExternalName("itemID")
+    private String itemID = null;
     @Expose
     @ExternalName("objectId")
     private String objectId = null;
@@ -134,5 +137,19 @@ public class ETCampaignAsset extends ETRestObject {
     */
     public void setObjectId(String objectId) {
         this.objectId = objectId;
+    }
+
+    /**
+     * @return The itemID of the ETCampaignAsset object.
+     */
+    public String getItemID() {
+        return itemID;
+    }
+
+    /**
+     * @param itemID        The Object Identifier of the ETCampaignAsset object.
+     */
+    public void setItemID(String itemID) {
+        this.itemID = itemID;
     }
 }

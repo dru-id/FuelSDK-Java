@@ -34,68 +34,21 @@
 
 package com.exacttarget.fuelsdk;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementRef;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.BeanUtilsBean;
-import org.apache.commons.beanutils.ConversionException;
-import org.apache.commons.beanutils.ConvertUtilsBean;
-import org.apache.commons.beanutils.Converter;
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.log4j.Logger;
-
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.InternalProperty;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
-import com.exacttarget.fuelsdk.internal.APIObject;
-import com.exacttarget.fuelsdk.internal.APIProperty;
-import com.exacttarget.fuelsdk.internal.Attribute;
-import com.exacttarget.fuelsdk.internal.ComplexFilterPart;
-import com.exacttarget.fuelsdk.internal.CreateOptions;
-import com.exacttarget.fuelsdk.internal.CreateRequest;
-import com.exacttarget.fuelsdk.internal.CreateResponse;
-import com.exacttarget.fuelsdk.internal.CreateResult;
-import com.exacttarget.fuelsdk.internal.DataExtension;
-import com.exacttarget.fuelsdk.internal.DataExtensionField;
-import com.exacttarget.fuelsdk.internal.DataExtensionFieldType;
-import com.exacttarget.fuelsdk.internal.DataExtensionObject;
-import com.exacttarget.fuelsdk.internal.DataFolder;
-import com.exacttarget.fuelsdk.internal.DeleteOptions;
-import com.exacttarget.fuelsdk.internal.DeleteRequest;
-import com.exacttarget.fuelsdk.internal.DeleteResponse;
-import com.exacttarget.fuelsdk.internal.DeleteResult;
-import com.exacttarget.fuelsdk.internal.FilterPart;
-import com.exacttarget.fuelsdk.internal.Email;
-import com.exacttarget.fuelsdk.internal.EmailType;
-import com.exacttarget.fuelsdk.internal.ExtractDescription;
-import com.exacttarget.fuelsdk.internal.ListClassificationEnum;
-import com.exacttarget.fuelsdk.internal.ListTypeEnum;
-import com.exacttarget.fuelsdk.internal.LogicalOperators;
-import com.exacttarget.fuelsdk.internal.ObjectExtension;
-import com.exacttarget.fuelsdk.internal.RetrieveRequest;
-import com.exacttarget.fuelsdk.internal.RetrieveRequestMsg;
-import com.exacttarget.fuelsdk.internal.RetrieveResponseMsg;
-import com.exacttarget.fuelsdk.internal.SimpleFilterPart;
-import com.exacttarget.fuelsdk.internal.SimpleOperators;
-import com.exacttarget.fuelsdk.internal.Soap;
-import com.exacttarget.fuelsdk.internal.Subscriber;
-import com.exacttarget.fuelsdk.internal.SubscriberStatus;
-import com.exacttarget.fuelsdk.internal.TriggeredSendDefinition;
-import com.exacttarget.fuelsdk.internal.TriggeredSendStatusEnum;
-import com.exacttarget.fuelsdk.internal.UpdateOptions;
-import com.exacttarget.fuelsdk.internal.UpdateRequest;
-import com.exacttarget.fuelsdk.internal.UpdateResponse;
-import com.exacttarget.fuelsdk.internal.UpdateResult;
+import com.exacttarget.fuelsdk.internal.*;
+import org.apache.commons.beanutils.*;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.*;
 
 /**
  * An <code>ETSoapObject</code> represents an object
@@ -276,10 +229,12 @@ public abstract class ETSoapObject extends ETApiObject {
         // Perform the SOAP retrieve:
         //
 
-        //Soap soap = connection.getSoap();
-        Soap soap = null;
+        Soap soap = connection.getSoap();
+        //Soap soap = null;
 
         RetrieveRequest retrieveRequest = new RetrieveRequest();
+
+        continueRequest = Optional.ofNullable(continueRequest).orElse(Optional.ofNullable(filter.getVars().get("continueRequest")).map(Object::toString).orElse(null));
 
         if (continueRequest == null) {
             // if soapObjectType is specified, use it; otherwise, default

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.salesforce-marketingcloud</groupId>
   <artifactId>fuelsdk</artifactId>
-  <version>1.5.0</version>
+  <version>1.5.0-drd</version>
   <name>Salesforce Marketing Cloud Java SDK</name>
   <description>Salesforce Marketing Cloud Java SDK</description>
   <url>https://github.com/salesforce-marketingcloud/FuelSDK-Java</url>
@@ -36,8 +36,22 @@
     <junit.version>4.12</junit.version>
     <lang.version>2.6</lang.version>
     <log4j.version>1.2.17</log4j.version>
+    <org.projectlombok.version>1.18.12</org.projectlombok.version>
+    <org.projectlombok.plugin.version>1.18.10.0</org.projectlombok.plugin.version>
+    <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
   </properties>
   <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${org.projectlombok.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.damnhandy</groupId>
+      <artifactId>handy-uri-templates</artifactId>
+      <version>2.1.8</version>
+    </dependency>
     <dependency>
       <groupId>commons-beanutils</groupId>
       <artifactId>commons-beanutils</artifactId>
@@ -99,17 +113,50 @@
     </dependency>   
   </dependencies>
   <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
     <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+      <id>genetsis-repository</id>
+      <name>Genetsis Repository</name>
+      <url>https://nexus.dru-id.com/repository/maven-releases/</url>
     </repository>
+    <snapshotRepository>
+      <id>genetsis-snapshot-repository</id>
+      <name>Genetsis Snapshot Repository</name>
+      <url>https://nexus.dru-id.com/repository/maven-snapshots/</url>
+    </snapshotRepository>
   </distributionManagement>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <encoding>UTF-8</encoding>
+          <showDeprecation>true</showDeprecation>
+          <showWarnings>true</showWarnings>
+          <fork>false</fork>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok-maven-plugin</artifactId>
+        <version>${org.projectlombok.plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>delombok</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <addOutputDirectory>false</addOutputDirectory>
+          <sourceDirectory>src/main/java</sourceDirectory>
+        </configuration>
+      </plugin>
+      <!--
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -121,6 +168,7 @@
           <autoReleaseAfterClose>false</autoReleaseAfterClose>
         </configuration>
       </plugin>
+      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>

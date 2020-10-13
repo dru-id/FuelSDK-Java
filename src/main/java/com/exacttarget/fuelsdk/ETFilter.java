@@ -34,11 +34,9 @@
 
 package com.exacttarget.fuelsdk;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
+
+import java.util.*;
 
 /**
  * An <code>ETFilter</code> object represents a filter that can be used to filter properties
@@ -48,12 +46,13 @@ public class ETFilter extends ETObject {
     @PrettyPrint
     private ETExpression expression = new ETExpression();
     @PrettyPrint
-    private List<String> orderBy = new ArrayList<String>();
+    private List<String> orderBy = new ArrayList<>();
     @PrettyPrint
-    private List<String> properties = new ArrayList<String>();
+    private List<String> properties = new ArrayList<>();
     @PrettyPrint
     private Boolean orderByAsc = true;
-
+    @PrettyPrint
+    private Map<String, Object> vars = new HashMap<>();
     /** 
     * @return     The ETExpression of the ETFilter object.
     */    
@@ -115,6 +114,28 @@ public class ETFilter extends ETObject {
     */
     public void addProperty(String property) {
         this.properties.add(property);
+    }
+
+    /**
+     * @return     The list of vars of the ETFilter object.
+     */
+    public Map<String, Object> getVars() {
+        return vars;
+    }
+
+    /**
+     * @param vars       The list of properties to set for the ETFilter object.
+     */
+    public void setVars(Map<String, Object> vars) {
+        this.vars = vars;
+    }
+
+    /**
+     * @param key       The key of the var.
+     * @param value       The value of the var.
+     */
+    public void addVar(String key, Object value) {
+        this.vars.put(key, value);
     }
 
     /** 

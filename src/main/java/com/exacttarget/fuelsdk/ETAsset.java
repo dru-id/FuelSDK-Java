@@ -7,9 +7,15 @@ package com.exacttarget.fuelsdk;
 
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import lombok.Getter;
+import lombok.Setter;
+
+
 import java.util.Date;
+import java.util.Map;
 
 /**
  * An <code>ETAsset</code> object represents aa asset
@@ -58,7 +64,27 @@ public class ETAsset  extends ETRestObject{
     @Expose
     @ExternalName("modifiedDate")
     private Date modifiedDate = null;
-        
+
+    @Getter
+    @Setter
+    @Expose
+    @ExternalName("data")
+    private Map<String, JsonObject> data = null;
+
+    @Getter @Setter
+    @Expose
+    @ExternalName("views")
+    private Map<String, JsonObject> views = null;
+
+    @Getter @Setter
+    @Expose
+    @ExternalName("tags")
+    private JsonArray tags = null;
+
+    @Getter @Setter
+    @Expose
+    @ExternalName("template")
+    private JsonObject template = null;
     
     /** 
     * @return The Identifier of the ETAsset object.

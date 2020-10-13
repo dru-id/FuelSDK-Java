@@ -34,26 +34,21 @@
 
 package com.exacttarget.fuelsdk;
 
+import com.damnhandy.uri.template.MalformedUriTemplateException;
+import com.damnhandy.uri.template.UriTemplate;
+import com.exacttarget.fuelsdk.ETRestConnection.Method;
+import com.exacttarget.fuelsdk.ETRestConnection.Response;
+import com.exacttarget.fuelsdk.annotations.RestObject;
+import com.google.gson.*;
+import com.google.gson.annotations.SerializedName;
+import org.apache.log4j.Logger;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.List;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.annotations.SerializedName;
-
-import org.apache.log4j.Logger;
-
-import com.exacttarget.fuelsdk.ETRestConnection.Method;
-
 import static com.exacttarget.fuelsdk.ETRestConnection.Method.*;
-
-import com.exacttarget.fuelsdk.ETRestConnection.Response;
-import com.exacttarget.fuelsdk.annotations.RestObject;
 
 /**
  * An <code>ETRestObject</code> represents an object
@@ -102,6 +97,17 @@ public abstract class ETRestObject extends ETApiObject {
         String primaryKey = annotations.primaryKey();
         String collection = annotations.collection();
         String totalCount = annotations.totalCount();
+
+        try {
+            logger.trace("path: " + path);
+            UriTemplate uri = UriTemplate.fromTemplate(path);
+            path = uri.expand(filter.getVars());
+            if (logger.isTraceEnabled()) {
+                logger.trace("expanding path with variables");
+            }
+        } catch (MalformedUriTemplateException e) {
+
+        }
 
         logger.trace("path: " + path);
         logger.trace("primaryKey: " + primaryKey);
