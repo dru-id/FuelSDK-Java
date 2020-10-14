@@ -47,6 +47,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Optional;
 
 import static com.exacttarget.fuelsdk.ETRestConnection.Method.*;
 
@@ -254,7 +255,7 @@ public abstract class ETRestObject extends ETApiObject {
 
         Gson gson = client.getGson();
         JsonParser jsonParser = new JsonParser();
-        JsonObject jsonObject = jsonParser.parse(r.getResponsePayload()).getAsJsonObject();
+        JsonObject jsonObject = Optional.ofNullable(r.getResponsePayload()).map(p -> jsonParser.parse(p).getAsJsonObject()).orElse(new JsonObject());
 
         if (jsonObject.get("page") != null) {
             response.setPage(jsonObject.get("page").getAsInt());

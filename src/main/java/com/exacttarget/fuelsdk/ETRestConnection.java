@@ -325,24 +325,26 @@ public class ETRestConnection {
             throw new ETSdkException("error opening " + connection.getURL(), ex);
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        try {
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line);
-            }
-        } catch (IOException ex) {
-            throw new ETSdkException("error reading " + connection.getURL(), ex);
-        } finally {
+        String response = null;
+        if (is != null) {
+            StringBuilder stringBuilder = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             try {
-                reader.close();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
             } catch (IOException ex) {
-                throw new ETSdkException("error closing " + connection.getURL(), ex);
+                throw new ETSdkException("error reading " + connection.getURL(), ex);
+            } finally {
+                try {
+                    reader.close();
+                } catch (IOException ex) {
+                    throw new ETSdkException("error closing " + connection.getURL(), ex);
+                }
             }
+            response = stringBuilder.toString();
         }
-
-        String response = stringBuilder.toString();
 
         if (logger.isDebugEnabled()) {
             JsonParser jsonParser = new JsonParser();
